@@ -14,13 +14,18 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Kaniko
-        uses: google-github-actions/setup-kaniko@v1
+        uses: docker://gcr.io/kaniko-project/executor:v1.23.0-debug
         with:
-          version: v1.23.2
+          args: |
+            --context /workspace --dockerfile /workspace/Dockerfile --destination docker.io/pifaqorik/kaniko-test:latest
+        env:
+          DOCKER_CONFIG: /kaniko/.docker
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Authenticate to Docker Hub
-        run: echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"pifaqorik\",\"password\":\"killernoob007\"}}}" > /kaniko/.docker/config.json
+        run: echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"${{ secrets.DOCKER_USERNAME }}\",\"password\":\"${{ secrets.DOCKER_PASSWORD }}\"}}}" > /kaniko/.docker/config.json
 
       - name: Build and Push Docker image
         run: |
-          /kaniko/executor --context . --dockerfile ./Dockerfile --destination docker.io/pifaqorik/kaniko-test:latest
+          /kaniko/executor --context /workspace --dockerfile /workspace/Dockerfile --destination docker.io/pifaqorik/kaniko-test:latest
