@@ -17,7 +17,7 @@ jobs:
         uses: docker://gcr.io/kaniko-project/executor:v1.23.0-debug
         with:
           args: |
-            --context /workspace --dockerfile /workspace/Dockerfile --destination docker.io/pifaqorik/kaniko-test:latest
+            --context /workspace --dockerfile ./Dockerfile --destination docker.io/pifaqorik/kaniko-test:latest
         env:
           DOCKER_CONFIG: /kaniko/.docker
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -28,4 +28,4 @@ jobs:
 
       - name: Build and Push Docker image
         run: |
-          /kaniko/executor --context /workspace --dockerfile /workspace/Dockerfile --destination docker.io/pifaqorik/kaniko-test:latest
+          /kaniko/executor --context /workspace --dockerfile ./Dockerfile --destination docker.io/pifaqorik/kaniko-test:latest
