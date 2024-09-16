@@ -30,3 +30,4 @@ jobs:
       - name: Build and Push Docker image
         run: |
           /kaniko/executor --context /workspace --dockerfile /workspace/Dockerfile --destination docker.io/pifaqorik/kaniko-test:latest
+
